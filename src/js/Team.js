@@ -1,36 +1,21 @@
-import Character from "./Character";
-
 export default class Team {
-  constructor() {
-    this.player = 0;
-    this.numberPlayers = 0;
+  constructor(name) {
+    this.name = name;
+    this.members = new Set();
   }
 
-  add(player) {
-    if (player instanceof Character) {
-      this.player.push(player);
-      this.numberPlayers++;
-    } else {
-      throw new Error("Error");
+  add(member) {
+    if (this.members.has(member)) {
+      throw new Error("Такой персонаж уже есть");
     }
+    this.members.add(member);
   }
 
-  [Symbol.iterator]() {
-    let current = 0;
-    const { players, numberOfPlayers } = this;
-    return {
-      next() {
-        if (current < numberOfPlayers) {
-          return {
-            value: players[current++],
-            done: false,
-          };
-        }
-        return {
-          value: undefined,
-          done: true,
-        };
-      },
-    };
+  *[Symbol.iterator]() {
+    const teamArray = Array.from(this.members);
+
+    for (let i = 0; i <= teamArray.length; i += 1) {
+      yield teamArray[i];
+    }
   }
 }
